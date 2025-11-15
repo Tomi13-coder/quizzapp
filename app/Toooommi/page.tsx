@@ -1,94 +1,133 @@
+"use client"
+//assimgent 1 improve visuls assimgent 2 trobleshot next/previous button
 import React from 'react'
+import { useState, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, 
-    CardAction,
     CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
     CardTitle } from '@/components/ui/card'
+
 const page = () => {
+  const [score,setScore] = useState(0)
+  const questions = useMemo(() => [
+    {
+
+      question:"what is the captial of France?",
+      options:["Rome","Manhattan", "Paris","Madrid" ],
+      answer:2
+    
+    },
+    {
+
+      question:"the ____ bird gets the worm",
+      options:["early","quick", "smart","bad" ],
+      answer:0
+    
+    },
+    {
+
+      question:"how many letters are in the alphabet",
+      options:["27","24", "26","23" ],
+      answer:2
+    
+    },
+    {
+
+      question:"what is the poorest country?",
+      options:["Brazil","South Sudan", "Burundi","Mozambique," ],
+      answer:1
+    
+    },
+  ], []);
+
+  const [currentIndex, setCurrentIndex]= useState(0)
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+  const [isFinished, setIsFinished] = useState(false)
+
+  const handleNext = () => {
+    if (selectedAnswer === questions[currentIndex].answer) {
+      setScore(score + 1);
+    }
+
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setSelectedAnswer(null);
+    } else {
+      setIsFinished(true);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      // This logic for score adjustment on previous is a bit tricky.
+      // A common approach is to disable score changes when going back,
+      // or to store answers for each question.
+      // For now, I'll just allow navigation.
+      setCurrentIndex(currentIndex - 1);
+      // Reset selection when going back
+      setSelectedAnswer(null);
+    }
+  };
+
+  const handleRestart = () => {
+    setScore(0);
+    setCurrentIndex(0);
+    setSelectedAnswer(null);
+    setIsFinished(false);
+  }
+
+  if (isFinished) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+        <Card className="w-full max-w-2xl text-center bg-gray-800 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-white">Quiz Complete!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-5xl font-bold text-green-400">{score} / {questions.length}</p>
+            <p className="text-lg text-gray-300 mt-2">Your final score</p>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+            <Button onClick={handleRestart} className="bg-orange-500 hover:bg-orange-600 text-white">
+              Restart Quiz
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    );
+  }
+
+  const currentQuestion = questions[currentIndex];
+
   return (
-    <div>
- <Card className='flex justify-center m-20 border-0 shadow-none'>
-    <CardContent className='flex flex-row items-center justify-center'>
-        <div className='bg-green-200 w-[40%] h-[50vh] rounded-l-lg  text-center text-2xl text-white font-bold flex justify-center shadow-lg items-center'>Play</div>
-        <div className=' w-[60%] h-[50vh] rounded-r-lg flex flex-col items-center justify-center shadow-lg shadow-t-lg shadow-green-100 border'>
-            <Card className='h-[22%] mb-[1%] ml-[1%] rounded-r-lg w-[95%] hover:bg-green-200 border-1 shadow-none'></Card>
-            <Card className='h-[22%] mb-[1%] ml-[1%] rounded-r-lg w-[95%] hover:bg-green-200 border-1 shadow-none'></Card>
-            <Card className='h-[22%] mb-[1%] ml-[1%] rounded-r-lg w-[95%] hover:bg-green-200 border-1 shadow-none'></Card>
-            <Card className='h-[22%] rounded-r-lg ml-[1%] w-[95%] hover:bg-green-200 border-1 shadow-none'></Card>
-        </div>
-    </CardContent>
- </Card><div className='w-[80vw] flex justify-between mx-4S'> 
-<Button>Previous</Button><Button>Next</Button>
-</div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+      <Card className="w-full max-w-4xl bg-gray-800 border-gray-700 shadow-2xl">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-orange-400 md:text-blue-400">Question {currentIndex + 1}/{questions.length}</CardTitle>
+          <CardDescription className="text-lg text-gray-300 pt-4">{currentQuestion.question}</CardDescription>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {currentQuestion.options.map((option, index) => (
+            <Button
+              key={index}
+              variant={selectedAnswer === index ? "default" : "outline"}
+              className={`h-auto py-4 text-left justify-start whitespace-normal ${selectedAnswer === index ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-200 border-gray-600'}`}
+              onClick={() => setSelectedAnswer(index)}
+            >
+              {option}
+            </Button>
+          ))}
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button onClick={handlePrevious} disabled={currentIndex === 0}>Previous</Button>
+          <Button onClick={handleNext} disabled={selectedAnswer === null}>Next</Button>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
 
 export default page
-// import { Button } from "@/components/ui/button"
-// import {
-//   Card,
-//   CardAction,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card"
-// import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
-
-//  function CardDemo() {
-//   return (
-//     <Card className="w-full max-w-sm">
-//       <CardHeader>
-//         <CardTitle>Login to your account</CardTitle>
-//         <CardDescription>
-//           Enter your email below to login to your account
-//         </CardDescription>
-//         <CardAction>
-//           <Button variant="link">Sign Up</Button>
-//         </CardAction>
-//       </CardHeader>
-//       <CardContent>
-//         <form>
-//           <div className="flex flex-col gap-6">
-//             <div className="grid gap-2">
-//               <Label htmlFor="email">Email</Label>
-//               <Input
-//                 id="email"
-//                 type="email"
-//                 placeholder="m@example.com"
-//                 required
-//               />
-//             </div>
-//             <div className="grid gap-2">
-//               <div className="flex items-center">
-//                 <Label htmlFor="password">Password</Label>
-//                 <a
-//                   href="#"
-//                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-//                 >
-//                   Forgot your password?
-//                 </a>
-//               </div>
-//               <Input id="password" type="password" required />
-//             </div>
-//           </div>
-//         </form>
-//       </CardContent>
-//       <CardFooter className="flex-col gap-2">
-//         <Button type="submit" className="w-full">
-//           Login
-//         </Button>
-//         <Button variant="outline" className="w-full">
-//           Login with Google
-//         </Button>
-//       </CardFooter>
-//     </Card>
-//   )
-// }
-// export default CardDemo
