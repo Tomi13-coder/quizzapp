@@ -10,7 +10,7 @@ import { Card,
     CardHeader,
     CardTitle } from '@/components/ui/card'
 
-const page = () => {
+const Page = () => {
   const [score,setScore] = useState(0)
   const questions = useMemo(() => [
     {
@@ -40,6 +40,26 @@ const page = () => {
       options:["Brazil","South Sudan", "Burundi","Mozambique," ],
       answer:1
     
+    },
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Earth", "Jupiter", "Mars", "Venus"],
+      answer: 2
+    },
+    {
+      question: "What is the largest mammal in the world?",
+      options: ["Elephant", "Blue Whale", "Giraffe", "Great White Shark"],
+      answer: 1
+    },
+    {
+      question: "Who wrote 'Romeo and Juliet'?",
+      options: ["William Shakespeare","Charles Dickens" , "Jane Austen", "Mark Twain"],
+      answer: 0
+    },
+    {
+      question: "What is the chemical symbol for water?",
+      options: ["O2","NaCl" , "CO2", "H2O"],
+      answer: 3
     },
   ], []);
 
@@ -130,4 +150,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
