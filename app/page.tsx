@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-const Page = () => {
+export default function Page  () {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-slate-800 p-4">
       <div className="text-center">
@@ -16,4 +16,4 @@ const Page = () => {
   )
 }
 
-export default Page
+
