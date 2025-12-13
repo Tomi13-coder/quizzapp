@@ -56,9 +56,7 @@ import { motion, Variants } from "framer-motion";
         initial="hidden"
         animate="visible"
       >
-        <motion.div variants={itemVariants} className="mb-6">
-          <BrainIcon className="h-16 w-16" />
-        </motion.div>
+        
  
         <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
           Welcome to the Quizzapp
